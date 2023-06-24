@@ -1,0 +1,4 @@
+tell application "System Events" to keystroke "c" using {command down}
+delay 1 -- Without this, the clipboard may have stale data.
+set theText to (the clipboard as text)
+say theText using "Evan (Enhanced)"
