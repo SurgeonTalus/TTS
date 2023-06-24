@@ -7,35 +7,37 @@ TTS.app is an app to control read and stop. If the prosess TTS Evan exists, Stop
 
 For easy keyboard control use this Siri shortcut https://www.icloud.com/shortcuts/6df9cee634d241c383384b88bb273b3c
 If it's not available, make a Siri shortcut with a "run apple script" with the following code and run with a command like f.eks.  CMD+ALT+A 
+
 <!DOCTYPE html>
 <html>
 <head>
-  <title>TTS Evan</title>
-  <script type="text/javascript">
-    var app_name = "TTS Evan";
-    var applescriptCode = `
-    tell application "System Events"
-      if (exists of application process "TTS Evan") is true then
-        set the_pids to (do shell script "ps ax | grep " & (quoted form of app_name) & "| grep -v grep | awk '{printf \"%d \", $1}'")
-        do shell script ("for PID in " & the_pids & "; do kill -9 $PID; done ")
-      else
-        tell application "TTS Evan"
-          ignoring application responses
-            activate
-          end ignoring
+  <title>Execute AppleScript</title>
+  <script>
+    function executeAppleScript() {
+      var app_name = "TTS Evan";
+      var appleScriptCode = `
+        tell application "System Events"
+          if (exists of application process "TTS Evan") is true then
+            set the_pids to (do shell script "ps ax | grep " & (quoted form of app_name) & "| grep -v grep | awk '{printf \"%d \", $1}'")
+            do shell script ("for PID in " & the_pids & "; do kill -9 $PID; done ")
+          else
+            tell application "TTS Evan"
+              ignoring application responses
+                activate
+              end ignoring
+            end tell
+          end if
         end tell
-      end if
-    end tell
-    `;
+      `;
 
-    function runAppleScript() {
-      var script = document.createElement("script");
-      script.innerHTML = applescriptCode;
-      document.body.appendChild(script);
+      // Execute AppleScript using JavaScript
+      var app = Application.currentApplication();
+      app.includeStandardAdditions = true;
+      app.doShellScript('osascript -e "' + appleScriptCode + '"');
     }
   </script>
 </head>
 <body>
-  <button onclick="runAppleScript()">Run AppleScript</button>
+  <button onclick="executeAppleScript()">Execute AppleScript</button>
 </body>
 </html>
