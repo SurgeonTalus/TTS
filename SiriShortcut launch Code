@@ -1,0 +1,13 @@
+set app_name to "TTS Evan"
+tell application "System Events"
+	if (exists of application process "TTS Evan") is true then
+		set the_pids to (do shell script "ps ax | grep " & (quoted form of app_name) & "| grep -v grep | awk '{printf \"%d \", $1}'")
+		do shell script ("for PID in " & the_pids & "; do kill -9 $PID; done ")
+	else
+		tell application "TTS Evan"
+			ignoring application responses
+				activate
+			end ignoring
+		end tell
+	end if
+end tell
